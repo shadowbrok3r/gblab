@@ -277,11 +277,20 @@ impl eframe::App for GbLabApp {
         self.touch.update(&ctx);
         self.run_emulation(&ctx);
 
-        Panel::top("gblab-top").show(ui, |ui| self.top_bar(ui));
+        #[cfg(target_os = "android")]
+        let (inset_top, inset_bottom) = crate::insets::safe_area(ctx.pixels_per_point());
+        #[cfg(not(target_os = "android"))]
+        let (inset_top, inset_bottom) = (0.0f32, 0.0f32);
+
+        Panel::top("gblab-top").show(ui, |ui| {
+            ui.add_space(inset_top);
+            self.top_bar(ui);
+        });
 
         if self.show_touch_pad {
             Panel::bottom("gblab-pad").show(ui, |ui| {
                 self.pad_states = input::virtual_gamepad(ui, &self.touch);
+                ui.add_space(inset_bottom);
             });
         } else {
             self.pad_states = [false; 8];

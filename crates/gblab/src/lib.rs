@@ -3,6 +3,8 @@
 mod app;
 mod audio;
 mod input;
+#[cfg(target_os = "android")]
+mod insets;
 
 pub use app::GbLabApp;
 

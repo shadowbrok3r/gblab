@@ -32,6 +32,9 @@ eframe = { version = "0.35", default-features = false, features = [
 ] }
 android-activity = { version = "0.6", features = ["native-activity"] }
 android_logger = "0.15"
+# jni 0.21 on purpose: raw VM/Activity come from ndk-context (see ios-egui host.rs).
+jni = "0.21"
+ndk-context = "0.1"
 
 [package.metadata.android]
 package = "com.kingsofalchemy.gblab"
