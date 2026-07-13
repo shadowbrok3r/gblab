@@ -1,0 +1,16 @@
+[workspace]
+resolver = "3"
+members = ["crates/gb-core", "crates/gblab"]
+
+[workspace.package]
+edition = "2024"
+version = "0.1.0"
+license = "MIT"
+
+[profile.release]
+lto = "thin"
+opt-level = 3
+
+# Emulator cores are unusable unoptimized; keep dev builds fast enough to play.
+[profile.dev.package.gb-core]
+opt-level = 2
