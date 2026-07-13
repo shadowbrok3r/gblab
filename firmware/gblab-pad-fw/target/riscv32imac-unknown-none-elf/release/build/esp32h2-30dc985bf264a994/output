@@ -1,3 +1,0 @@
-cargo:rustc-link-search=/home/shadowbroker/Documents/Rust/gblab/firmware/gblab-pad-fw/target/riscv32imac-unknown-none-elf/release/build/esp32h2-30dc985bf264a994/out
-cargo:rerun-if-changed=device.x
-cargo:rerun-if-changed=build.rs
