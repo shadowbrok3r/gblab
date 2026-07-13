@@ -7,7 +7,9 @@ use egui::{CentralPanel, Color32, ColorImage, Panel, TextureHandle, TextureOptio
 use gb_core::{GameBoy, SCREEN_H, SCREEN_W};
 
 use crate::audio::AudioOut;
-use crate::input::{self, ControllerLink, NullController, TouchTracker};
+use crate::input::{self, ControllerLink, TouchTracker};
+#[cfg(not(target_os = "android"))]
+use crate::input::NullController;
 
 /// Native Game Boy frame duration (59.7275 Hz).
 const FRAME_TIME: Duration = Duration::from_nanos(16_742_706);
@@ -44,6 +46,10 @@ impl GbLabApp {
                 None
             }
         };
+        #[cfg(target_os = "android")]
+        let controller: Box<dyn ControllerLink> = Box::new(crate::ble::BleLink::new());
+        #[cfg(not(target_os = "android"))]
+        let controller: Box<dyn ControllerLink> = Box::new(NullController);
         let mut app = GbLabApp {
             gb: None,
             rom: Vec::new(),
@@ -52,7 +58,7 @@ impl GbLabApp {
             paused: false,
             texture: None,
             audio,
-            controller: Box::new(NullController),
+            controller,
             touch: TouchTracker::default(),
             show_touch_pad: cfg!(target_os = "android"),
             show_browser: false,
@@ -210,7 +216,18 @@ impl GbLabApp {
                 ui.label(format!("{} [{:?}]", gb.title(), gb.model));
             }
             ui.with_layout(egui::Layout::right_to_left(egui::Align::Center), |ui| {
-                ui.label(self.controller.status());
+                if self.controller.enabled() {
+                    if ui.small_button("off").clicked() {
+                        self.controller.set_enabled(false);
+                    }
+                    ui.label(self.controller.status());
+                } else if cfg!(target_os = "android") {
+                    if ui.button("Connect pad").clicked() {
+                        self.controller.set_enabled(true);
+                    }
+                } else {
+                    ui.label(self.controller.status());
+                }
             });
         });
     }

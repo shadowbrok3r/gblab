@@ -1,0 +1,9 @@
+/home/shadowbroker/Documents/Rust/gblab/firmware/gblab-pad-fw/target/riscv32imac-unknown-none-elf/release/deps/embassy_time_driver-3f728773829ba540.d: /home/shadowbroker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/embassy-time-driver-0.2.2/src/lib.rs /home/shadowbroker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/embassy-time-driver-0.2.2/src/tick.rs /home/shadowbroker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/embassy-time-driver-0.2.2/src/../README.md
+
+/home/shadowbroker/Documents/Rust/gblab/firmware/gblab-pad-fw/target/riscv32imac-unknown-none-elf/release/deps/libembassy_time_driver-3f728773829ba540.rlib: /home/shadowbroker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/embassy-time-driver-0.2.2/src/lib.rs /home/shadowbroker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/embassy-time-driver-0.2.2/src/tick.rs /home/shadowbroker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/embassy-time-driver-0.2.2/src/../README.md
+
+/home/shadowbroker/Documents/Rust/gblab/firmware/gblab-pad-fw/target/riscv32imac-unknown-none-elf/release/deps/libembassy_time_driver-3f728773829ba540.rmeta: /home/shadowbroker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/embassy-time-driver-0.2.2/src/lib.rs /home/shadowbroker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/embassy-time-driver-0.2.2/src/tick.rs /home/shadowbroker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/embassy-time-driver-0.2.2/src/../README.md
+
+/home/shadowbroker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/embassy-time-driver-0.2.2/src/lib.rs:
+/home/shadowbroker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/embassy-time-driver-0.2.2/src/tick.rs:
+/home/shadowbroker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/embassy-time-driver-0.2.2/src/../README.md:

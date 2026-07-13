@@ -38,6 +38,7 @@ ndk-context = "0.1"
 
 [package.metadata.android]
 package = "com.kingsofalchemy.gblab"
+java_sources = "java"
 
 [package.metadata.android.sdk]
 min_sdk_version = 26

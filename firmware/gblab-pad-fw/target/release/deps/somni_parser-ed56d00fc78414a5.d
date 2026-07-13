@@ -1,0 +1,10 @@
+/home/shadowbroker/Documents/Rust/gblab/firmware/gblab-pad-fw/target/release/deps/somni_parser-ed56d00fc78414a5.d: /home/shadowbroker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/somni-parser-0.2.2/src/lib.rs /home/shadowbroker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/somni-parser-0.2.2/src/ast.rs /home/shadowbroker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/somni-parser-0.2.2/src/lexer.rs /home/shadowbroker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/somni-parser-0.2.2/src/parser.rs
+
+/home/shadowbroker/Documents/Rust/gblab/firmware/gblab-pad-fw/target/release/deps/libsomni_parser-ed56d00fc78414a5.rlib: /home/shadowbroker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/somni-parser-0.2.2/src/lib.rs /home/shadowbroker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/somni-parser-0.2.2/src/ast.rs /home/shadowbroker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/somni-parser-0.2.2/src/lexer.rs /home/shadowbroker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/somni-parser-0.2.2/src/parser.rs
+
+/home/shadowbroker/Documents/Rust/gblab/firmware/gblab-pad-fw/target/release/deps/libsomni_parser-ed56d00fc78414a5.rmeta: /home/shadowbroker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/somni-parser-0.2.2/src/lib.rs /home/shadowbroker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/somni-parser-0.2.2/src/ast.rs /home/shadowbroker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/somni-parser-0.2.2/src/lexer.rs /home/shadowbroker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/somni-parser-0.2.2/src/parser.rs
+
+/home/shadowbroker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/somni-parser-0.2.2/src/lib.rs:
+/home/shadowbroker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/somni-parser-0.2.2/src/ast.rs:
+/home/shadowbroker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/somni-parser-0.2.2/src/lexer.rs:
+/home/shadowbroker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/somni-parser-0.2.2/src/parser.rs:

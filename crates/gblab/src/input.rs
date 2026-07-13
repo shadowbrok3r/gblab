@@ -24,15 +24,21 @@ pub fn merge(a: ButtonStates, b: ButtonStates) -> ButtonStates {
     out
 }
 
-/// External controller feed. The ESP32-H2 GATT client will implement this.
+/// External controller feed. The ESP32-H2 GATT client implements this.
 pub trait ControllerLink {
     /// Latest button snapshot, or None when no controller is connected.
     fn poll(&mut self) -> Option<ButtonStates>;
     fn status(&self) -> String;
+    fn set_enabled(&mut self, _on: bool) {}
+    fn enabled(&self) -> bool {
+        false
+    }
 }
 
+#[cfg(not(target_os = "android"))]
 pub struct NullController;
 
+#[cfg(not(target_os = "android"))]
 impl ControllerLink for NullController {
     fn poll(&mut self) -> Option<ButtonStates> {
         None

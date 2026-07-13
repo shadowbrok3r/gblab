@@ -2,6 +2,8 @@
 
 mod app;
 mod audio;
+#[cfg(target_os = "android")]
+mod ble;
 mod input;
 #[cfg(target_os = "android")]
 mod insets;

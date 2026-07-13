@@ -68,10 +68,36 @@ Render any ROM headless with:
 cargo run -p gb-core --example screenshot -- rom.gb out.ppm [frames]
 ```
 
-## Controller roadmap
+## Controller (ESP32-H2 BLE pad)
 
-- `gblab::input::ControllerLink` is the seam: BLE GATT client (Android, via
-  JNI) implements it next to the existing keyboard/touch sources.
-- Firmware: ESP32-H2-DEV-KIT-N4 (BLE 5, no classic BT/Wi-Fi) advertising a
-  custom GATT service with a button-state characteristic (notify).
-- Wiring design for the button matrix happens in WireLab.
+The controller is an ESP32-H2-DEV-KIT-N4 (Waveshare) running
+`firmware/gblab-pad-fw`: a trouble-host GATT peripheral at fixed static
+random address `FF:62:4C:42:47:FF`, service
+`8f7a2d43-1e5b-4c9a-9d0e-5c33a1b0f001`, with a 1-byte buttons characteristic
+(`...f002`, read+notify). Bit order matches the joypad: Right, Left, Up,
+Down, A, B, Select, Start. The BOOT button doubles as A for bench tests.
+
+```sh
+cd firmware/gblab-pad-fw
+cargo run --release        # espflash flash --monitor
+```
+
+Button wiring (active-low, one side to GPIO, other to GND; internal pull-ups):
+
+| Button | GPIO | | Button | GPIO |
+| ------ | ---- |-| ------ | ---- |
+| Up     | 0    | | A      | 10   |
+| Down   | 1    | | B      | 11   |
+| Left   | 5    | | Select | 12   |
+| Right  | 4    | | Start  | 22   |
+
+GPIO13/14 are the 32K-crystal pins and GPIO8/9/25 are strapping pins on this
+board; avoid them for buttons. The wiring diagram lives in WireLab
+("GBLab Controller" in the Examples menu, board profile
+`esp32-h2-devkit-n4`).
+
+On the phone, tap "Connect pad" in the top bar. The app connects directly to
+the fixed address (no scanning, no location permission), needs the Bluetooth
+permission once, and auto-reconnects every few seconds while enabled. The
+Android side is `java/.../BleController.java` (compiled into the APK by
+cargo-apk2's `java_sources`) polled from Rust via JNI in `src/ble.rs`.

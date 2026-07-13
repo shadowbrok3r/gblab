@@ -14,7 +14,7 @@ pub fn safe_area(pixels_per_point: f32) -> (f32, f32) {
     (t / p, b / p)
 }
 
-fn with_activity<R>(
+pub(crate) fn with_activity<R>(
     f: impl FnOnce(&mut jni::JNIEnv, &JObject) -> jni::errors::Result<R>,
 ) -> Option<R> {
     let ctx = ndk_context::android_context();

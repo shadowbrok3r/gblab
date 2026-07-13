@@ -1,0 +1,12 @@
+/home/shadowbroker/Documents/Rust/gblab/firmware/gblab-pad-fw/target/riscv32imac-unknown-none-elf/release/deps/esp_println-62a1f366a1e20f2a.d: /home/shadowbroker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/esp-println-0.17.0/src/lib.rs /home/shadowbroker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/esp-println-0.17.0/src/logger.rs /home/shadowbroker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/esp-println-0.17.0/src/../README.md /home/shadowbroker/Documents/Rust/gblab/firmware/gblab-pad-fw/target/riscv32imac-unknown-none-elf/release/build/esp-println-fc47827723b2350c/out/log_filter.rs
+
+/home/shadowbroker/Documents/Rust/gblab/firmware/gblab-pad-fw/target/riscv32imac-unknown-none-elf/release/deps/libesp_println-62a1f366a1e20f2a.rlib: /home/shadowbroker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/esp-println-0.17.0/src/lib.rs /home/shadowbroker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/esp-println-0.17.0/src/logger.rs /home/shadowbroker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/esp-println-0.17.0/src/../README.md /home/shadowbroker/Documents/Rust/gblab/firmware/gblab-pad-fw/target/riscv32imac-unknown-none-elf/release/build/esp-println-fc47827723b2350c/out/log_filter.rs
+
+/home/shadowbroker/Documents/Rust/gblab/firmware/gblab-pad-fw/target/riscv32imac-unknown-none-elf/release/deps/libesp_println-62a1f366a1e20f2a.rmeta: /home/shadowbroker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/esp-println-0.17.0/src/lib.rs /home/shadowbroker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/esp-println-0.17.0/src/logger.rs /home/shadowbroker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/esp-println-0.17.0/src/../README.md /home/shadowbroker/Documents/Rust/gblab/firmware/gblab-pad-fw/target/riscv32imac-unknown-none-elf/release/build/esp-println-fc47827723b2350c/out/log_filter.rs
+
+/home/shadowbroker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/esp-println-0.17.0/src/lib.rs:
+/home/shadowbroker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/esp-println-0.17.0/src/logger.rs:
+/home/shadowbroker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/esp-println-0.17.0/src/../README.md:
+/home/shadowbroker/Documents/Rust/gblab/firmware/gblab-pad-fw/target/riscv32imac-unknown-none-elf/release/build/esp-println-fc47827723b2350c/out/log_filter.rs:
+
+# env-dep:OUT_DIR=/home/shadowbroker/Documents/Rust/gblab/firmware/gblab-pad-fw/target/riscv32imac-unknown-none-elf/release/build/esp-println-fc47827723b2350c/out

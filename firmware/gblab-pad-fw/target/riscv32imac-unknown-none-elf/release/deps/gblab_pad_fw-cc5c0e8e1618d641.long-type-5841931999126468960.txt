@@ -1,0 +1,1 @@
+StackBuilder<'_, trouble_host::prelude::ExternalController<esp_radio::ble::controller::BleConnector<'_>, 20>, trouble_host::packet_pool::StaticPacketPool<trouble_host::__export::embassy_sync::blocking_mutex::raw::CriticalSectionRawMutex, 255, 16>>

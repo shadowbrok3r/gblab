@@ -1,0 +1,9 @@
+/home/shadowbroker/Documents/Rust/gblab/firmware/gblab-pad-fw/target/release/deps/esp_metadata_generated-6c5cffbd987a98dd.d: /home/shadowbroker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/esp-metadata-generated-0.4.0/src/lib.rs /home/shadowbroker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/esp-metadata-generated-0.4.0/src/_generated_esp32h2.rs /home/shadowbroker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/esp-metadata-generated-0.4.0/src/_build_script_utils.rs
+
+/home/shadowbroker/Documents/Rust/gblab/firmware/gblab-pad-fw/target/release/deps/libesp_metadata_generated-6c5cffbd987a98dd.rlib: /home/shadowbroker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/esp-metadata-generated-0.4.0/src/lib.rs /home/shadowbroker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/esp-metadata-generated-0.4.0/src/_generated_esp32h2.rs /home/shadowbroker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/esp-metadata-generated-0.4.0/src/_build_script_utils.rs
+
+/home/shadowbroker/Documents/Rust/gblab/firmware/gblab-pad-fw/target/release/deps/libesp_metadata_generated-6c5cffbd987a98dd.rmeta: /home/shadowbroker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/esp-metadata-generated-0.4.0/src/lib.rs /home/shadowbroker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/esp-metadata-generated-0.4.0/src/_generated_esp32h2.rs /home/shadowbroker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/esp-metadata-generated-0.4.0/src/_build_script_utils.rs
+
+/home/shadowbroker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/esp-metadata-generated-0.4.0/src/lib.rs:
+/home/shadowbroker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/esp-metadata-generated-0.4.0/src/_generated_esp32h2.rs:
+/home/shadowbroker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/esp-metadata-generated-0.4.0/src/_build_script_utils.rs:

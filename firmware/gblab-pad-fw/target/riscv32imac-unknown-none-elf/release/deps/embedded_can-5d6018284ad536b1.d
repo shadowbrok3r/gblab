@@ -1,0 +1,10 @@
+/home/shadowbroker/Documents/Rust/gblab/firmware/gblab-pad-fw/target/riscv32imac-unknown-none-elf/release/deps/embedded_can-5d6018284ad536b1.d: /home/shadowbroker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/embedded-can-0.4.1/src/lib.rs /home/shadowbroker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/embedded-can-0.4.1/src/blocking.rs /home/shadowbroker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/embedded-can-0.4.1/src/nb.rs /home/shadowbroker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/embedded-can-0.4.1/src/id.rs
+
+/home/shadowbroker/Documents/Rust/gblab/firmware/gblab-pad-fw/target/riscv32imac-unknown-none-elf/release/deps/libembedded_can-5d6018284ad536b1.rlib: /home/shadowbroker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/embedded-can-0.4.1/src/lib.rs /home/shadowbroker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/embedded-can-0.4.1/src/blocking.rs /home/shadowbroker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/embedded-can-0.4.1/src/nb.rs /home/shadowbroker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/embedded-can-0.4.1/src/id.rs
+
+/home/shadowbroker/Documents/Rust/gblab/firmware/gblab-pad-fw/target/riscv32imac-unknown-none-elf/release/deps/libembedded_can-5d6018284ad536b1.rmeta: /home/shadowbroker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/embedded-can-0.4.1/src/lib.rs /home/shadowbroker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/embedded-can-0.4.1/src/blocking.rs /home/shadowbroker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/embedded-can-0.4.1/src/nb.rs /home/shadowbroker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/embedded-can-0.4.1/src/id.rs
+
+/home/shadowbroker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/embedded-can-0.4.1/src/lib.rs:
+/home/shadowbroker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/embedded-can-0.4.1/src/blocking.rs:
+/home/shadowbroker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/embedded-can-0.4.1/src/nb.rs:
+/home/shadowbroker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/embedded-can-0.4.1/src/id.rs:
