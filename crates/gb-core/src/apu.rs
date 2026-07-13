@@ -374,10 +374,10 @@ impl Apu {
         mixed[0] *= vol_l / 8.0 / 4.0;
         mixed[1] *= vol_r / 8.0 / 4.0;
         // High-pass to remove DC offset.
-        for ch in 0..2 {
-            let out = mixed[ch] - self.hp_cap[ch];
-            self.hp_cap[ch] = mixed[ch] - out * 0.9995;
-            mixed[ch] = out;
+        for (m, cap) in mixed.iter_mut().zip(self.hp_cap.iter_mut()) {
+            let out = *m - *cap;
+            *cap = *m - out * 0.9995;
+            *m = out;
         }
         self.samples.push(mixed[0]);
         self.samples.push(mixed[1]);

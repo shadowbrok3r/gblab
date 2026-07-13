@@ -1,6 +1,6 @@
 [workspace]
 resolver = "3"
-members = ["crates/gb-core", "crates/gblab"]
+members = ["crates/gb-core", "crates/gblab", "crates/gblab-desktop"]
 
 [workspace.package]
 edition = "2024"

@@ -93,6 +93,11 @@ impl GameBoy {
         std::mem::take(&mut self.cpu.bus.serial_out)
     }
 
+    /// Read any bus address without side effects on timing (for tests/tools).
+    pub fn debug_read(&mut self, addr: u16) -> u8 {
+        self.cpu.bus.read(addr)
+    }
+
     pub fn save_ram(&self) -> Option<&[u8]> {
         self.cpu.bus.cart.save_ram()
     }

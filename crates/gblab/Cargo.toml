@@ -8,10 +8,6 @@ description = "GBLab: Game Boy emulator frontend for desktop and Android"
 [lib]
 crate-type = ["cdylib", "rlib"]
 
-[[bin]]
-name = "gblab"
-path = "src/main.rs"
-
 [dependencies]
 gb-core = { path = "../gb-core" }
 egui = "0.35"
@@ -43,6 +39,10 @@ package = "com.kingsofalchemy.gblab"
 [package.metadata.android.sdk]
 min_sdk_version = 26
 target_sdk_version = 35
+
+[package.metadata.android.signing.release]
+path = "/home/shadowbroker/.android/gblab-release.keystore"
+keystore_password = "gblab-sideload"
 
 [package.metadata.android.application]
 label = "GBLab"
