@@ -6,7 +6,7 @@ use std::time::{Duration, Instant};
 use jni::objects::{GlobalRef, JClass, JString, JValue};
 
 use crate::input::{ButtonStates, ControllerLink};
-use crate::insets::with_activity;
+use crate::jvm::{with_activity, with_context, with_env};
 
 const CLASS_NAME: &str = "com.kingsofalchemy.gblab.BleController";
 
@@ -20,9 +20,9 @@ static CLASS: OnceLock<Option<GlobalRef>> = OnceLock::new();
 fn class() -> Option<&'static GlobalRef> {
     CLASS
         .get_or_init(|| {
-            with_activity(|env, activity| {
+            with_context(|env, context| {
                 let loader = env
-                    .call_method(activity, "getClassLoader", "()Ljava/lang/ClassLoader;", &[])?
+                    .call_method(context, "getClassLoader", "()Ljava/lang/ClassLoader;", &[])?
                     .l()?;
                 let name = env.new_string(CLASS_NAME)?;
                 let class = env
@@ -41,7 +41,7 @@ fn class() -> Option<&'static GlobalRef> {
 
 fn static_int(field: &str) -> Option<i32> {
     let class = class()?;
-    with_activity(|env, _| {
+    with_env(|env| {
         let k = JClass::from(env.new_local_ref(class.as_obj())?);
         env.get_static_field(&k, field, "I")?.i()
     })
@@ -49,7 +49,7 @@ fn static_int(field: &str) -> Option<i32> {
 
 fn static_string(field: &str) -> Option<String> {
     let class = class()?;
-    with_activity(|env, _| {
+    with_env(|env| {
         let k = JClass::from(env.new_local_ref(class.as_obj())?);
         let obj = env.get_static_field(&k, field, "Ljava/lang/String;")?.l()?;
         let s: String = env.get_string(&JString::from(obj))?.into();
@@ -64,7 +64,7 @@ fn call_start() {
             env.call_static_method(
                 &k,
                 "start",
-                "(Landroid/app/Activity;)V",
+                "(Landroid/content/Context;)V",
                 &[JValue::Object(activity)],
             )?
             .v()
@@ -74,7 +74,7 @@ fn call_start() {
 
 fn call_stop() {
     if let Some(class) = class() {
-        with_activity(|env, _| {
+        with_env(|env| {
             let k = JClass::from(env.new_local_ref(class.as_obj())?);
             env.call_static_method(&k, "stop", "()V", &[])?.v()
         });
@@ -88,6 +88,9 @@ pub struct BleLink {
 
 impl BleLink {
     pub fn new() -> Self {
+        // Clears Java statics (state, permission one-shot) left from a
+        // previous session in the same process.
+        call_stop();
         BleLink { enabled: false, next_retry: Instant::now() }
     }
 }

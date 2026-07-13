@@ -12,6 +12,7 @@ import android.bluetooth.BluetoothManager;
 import android.bluetooth.BluetoothProfile;
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.os.Build;
 import java.util.UUID;
 
 /**
@@ -37,19 +38,34 @@ public final class BleController {
     private static final UUID CCCD = UUID.fromString("00002902-0000-1000-8000-00805f9b34fb");
 
     private static BluetoothGatt gatt;
+    private static boolean permissionRequested;
 
     private BleController() {}
 
-    public static synchronized void start(Activity activity) {
+    public static synchronized void start(Context context) {
         if (state == CONNECTING || state == CONNECTED) {
+            return;
+        }
+        if (!(context instanceof Activity)) {
+            state = FAILED;
+            detail = "internal: no activity";
+            return;
+        }
+        Activity activity = (Activity) context;
+        if (Build.VERSION.SDK_INT < 33) {
+            state = FAILED;
+            detail = "needs android 13+";
             return;
         }
         if (activity.checkSelfPermission("android.permission.BLUETOOTH_CONNECT")
                 != PackageManager.PERMISSION_GRANTED) {
             state = NEED_PERMISSION;
             detail = "waiting for permission";
-            activity.requestPermissions(
-                    new String[] {"android.permission.BLUETOOTH_CONNECT"}, 71);
+            if (!permissionRequested) {
+                permissionRequested = true;
+                activity.requestPermissions(
+                        new String[] {"android.permission.BLUETOOTH_CONNECT"}, 71);
+            }
             return;
         }
         BluetoothManager bm =
@@ -68,6 +84,10 @@ public final class BleController {
             gatt = dev.connectGatt(
                     activity.getApplicationContext(), false, callback,
                     BluetoothDevice.TRANSPORT_LE);
+            if (gatt == null) {
+                state = FAILED;
+                detail = "bluetooth unavailable";
+            }
         } catch (Exception e) {
             state = FAILED;
             detail = String.valueOf(e.getMessage());
@@ -83,6 +103,7 @@ public final class BleController {
             gatt = null;
         }
         buttons = 0;
+        permissionRequested = false;
         state = IDLE;
         detail = "";
     }

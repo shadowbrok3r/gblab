@@ -2,8 +2,9 @@
 
 use std::sync::OnceLock;
 
-use jni::JavaVM;
 use jni::objects::{JObject, JValue};
+
+use crate::jvm::with_context;
 
 static INSETS_PX: OnceLock<(f32, f32)> = OnceLock::new();
 
@@ -14,28 +15,11 @@ pub fn safe_area(pixels_per_point: f32) -> (f32, f32) {
     (t / p, b / p)
 }
 
-pub(crate) fn with_activity<R>(
-    f: impl FnOnce(&mut jni::JNIEnv, &JObject) -> jni::errors::Result<R>,
-) -> Option<R> {
-    let ctx = ndk_context::android_context();
-    let vm = unsafe { JavaVM::from_raw(ctx.vm().cast()) }.ok()?;
-    let mut env = vm.attach_current_thread().ok()?;
-    let activity = unsafe { JObject::from_raw(ctx.context().cast()) };
-    match f(&mut env, &activity) {
-        Ok(r) => Some(r),
-        Err(e) => {
-            let _ = env.exception_clear();
-            log::error!("insets JNI error: {e:?}");
-            None
-        }
-    }
-}
-
 // Resources lookups are thread-safe; View inset APIs must not run off the UI thread.
 fn read_insets_px() -> Option<(f32, f32)> {
-    with_activity(|env, activity| {
+    with_context(|env, context| {
         let res = env
-            .call_method(activity, "getResources", "()Landroid/content/res/Resources;", &[])?
+            .call_method(context, "getResources", "()Landroid/content/res/Resources;", &[])?
             .l()?;
         let top = android_dimen_px(env, &res, "status_bar_height")?;
         let bottom = android_dimen_px(env, &res, "navigation_bar_height")?;

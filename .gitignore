@@ -1,5 +1,8 @@
 /target
+/firmware/gblab-pad-fw/target
 *.apk
 *.idsig
 /test-roms/
 *.sav
+firmware/gblab-pad-fw/target/riscv32imac-unknown-none-elf/release/deps/gblab_pad_fw-4e2d1417ea4c2f81
+firmware/gblab-pad-fw/target/riscv32imac-unknown-none-elf/release/gblab-pad-fw

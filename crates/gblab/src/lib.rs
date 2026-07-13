@@ -7,6 +7,8 @@ mod ble;
 mod input;
 #[cfg(target_os = "android")]
 mod insets;
+#[cfg(target_os = "android")]
+mod jvm;
 
 pub use app::GbLabApp;
 
@@ -24,6 +26,8 @@ fn android_main(android_app: android_activity::AndroidApp) {
     std::panic::set_hook(Box::new(|info| {
         log::error!("panic: {info}");
     }));
+
+    jvm::set_activity(android_app.activity_as_ptr());
 
     let mut options = eframe::NativeOptions::default();
     options.android_app = Some(android_app);
