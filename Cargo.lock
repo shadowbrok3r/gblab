@@ -1019,6 +1019,10 @@ name = "gb-core"
 version = "0.1.0"
 
 [[package]]
+name = "gba-core"
+version = "0.1.0"
+
+[[package]]
 name = "gblab"
 version = "0.1.0"
 dependencies = [
@@ -1029,6 +1033,7 @@ dependencies = [
  "egui",
  "env_logger",
  "gb-core",
+ "gba-core",
  "jni 0.21.1",
  "log",
  "ndk-context",

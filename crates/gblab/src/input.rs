@@ -14,11 +14,12 @@ pub const ALL_BUTTONS: [Button; 8] = [
     Button::Start,
 ];
 
-pub type ButtonStates = [bool; 8];
+/// Order: Right, Left, Up, Down, A, B, Select, Start, L, R.
+pub type ButtonStates = [bool; 10];
 
 pub fn merge(a: ButtonStates, b: ButtonStates) -> ButtonStates {
-    let mut out = [false; 8];
-    for i in 0..8 {
+    let mut out = [false; 10];
+    for i in 0..10 {
         out[i] = a[i] || b[i];
     }
     out
@@ -60,6 +61,8 @@ pub fn keyboard(ctx: &egui::Context) -> ButtonStates {
             i.key_down(Key::Z),
             i.key_down(Key::Backspace),
             i.key_down(Key::Enter),
+            i.key_down(Key::Q),
+            i.key_down(Key::W),
         ]
     })
 }
@@ -102,7 +105,7 @@ impl TouchTracker {
 }
 
 /// Draw the virtual gamepad into `ui` and return pressed states.
-pub fn virtual_gamepad(ui: &mut egui::Ui, tracker: &TouchTracker) -> ButtonStates {
+pub fn virtual_gamepad(ui: &mut egui::Ui, tracker: &TouchTracker, shoulders: bool) -> ButtonStates {
     use egui::{Align2, Color32, CornerRadius, FontId, Rect, Sense, Stroke, pos2, vec2};
 
     let height = 190.0;
@@ -111,7 +114,7 @@ pub fn virtual_gamepad(ui: &mut egui::Ui, tracker: &TouchTracker) -> ButtonState
     let points = tracker.points(ui.ctx());
     let hit = |r: Rect| points.iter().any(|p| r.contains(*p));
 
-    let mut states = [false; 8];
+    let mut states = [false; 10];
     let base = Color32::from_gray(60);
     let base_hit = Color32::from_gray(110);
     let text_col = Color32::from_gray(220);
@@ -147,15 +150,19 @@ pub fn virtual_gamepad(ui: &mut egui::Ui, tracker: &TouchTracker) -> ButtonState
         painter.text(c, Align2::CENTER_CENTER, label, FontId::proportional(22.0), text_col);
     }
 
-    // Start / Select pills in the middle.
-    let pills = [
-        (Button::Select, pos2(rect.center().x - 45.0, rect.bottom() - 30.0), "SELECT"),
-        (Button::Start, pos2(rect.center().x + 45.0, rect.bottom() - 30.0), "START"),
+    // Start / Select pills in the middle; L / R shoulder pills when enabled.
+    let mut pills = vec![
+        (6usize, pos2(rect.center().x - 45.0, rect.bottom() - 30.0), "SELECT"),
+        (7usize, pos2(rect.center().x + 45.0, rect.bottom() - 30.0), "START"),
     ];
-    for (btn, c, label) in pills {
+    if shoulders {
+        pills.push((8, pos2(rect.left() + 45.0, rect.top() + 20.0), "L"));
+        pills.push((9, pos2(rect.right() - 45.0, rect.top() + 20.0), "R"));
+    }
+    for (idx, c, label) in pills {
         let r = Rect::from_center_size(c, vec2(74.0, 26.0));
         let pressed = hit(r);
-        set(&mut states, btn, pressed);
+        states[idx] = pressed;
         painter.rect_filled(r, CornerRadius::same(13), if pressed { base_hit } else { base });
         painter.rect_stroke(
             r,
@@ -172,4 +179,40 @@ pub fn virtual_gamepad(ui: &mut egui::Ui, tracker: &TouchTracker) -> ButtonState
 fn set(states: &mut ButtonStates, b: Button, v: bool) {
     let idx = ALL_BUTTONS.iter().position(|&x| x == b).unwrap();
     states[idx] = v;
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn merge_ors_all_ten_indices() {
+        let mut a = [false; 10];
+        let mut b = [false; 10];
+        a[0] = true;
+        a[9] = true;
+        b[5] = true;
+        b[8] = true;
+        let out = merge(a, b);
+        for (i, &v) in out.iter().enumerate() {
+            assert_eq!(v, matches!(i, 0 | 5 | 8 | 9), "index {i}");
+        }
+    }
+
+    #[test]
+    fn merge_identity_on_empty() {
+        assert_eq!(merge([false; 10], [false; 10]), [false; 10]);
+        let all = [true; 10];
+        assert_eq!(merge(all, [false; 10]), all);
+    }
+
+    #[test]
+    fn set_maps_gb_buttons_to_documented_order() {
+        let mut states = [false; 10];
+        set(&mut states, Button::Right, true);
+        assert!(states[0]);
+        set(&mut states, Button::Start, true);
+        assert!(states[7]);
+        assert!(!states[8] && !states[9]);
+    }
 }

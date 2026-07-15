@@ -10,6 +10,7 @@ GATT), and the controller wiring gets designed in WireLab.
 | Crate                  | What it is                                                        |
 | ---------------------- | ----------------------------------------------------------------- |
 | `crates/gb-core`       | Pure emulator core (SM83 CPU, PPU, APU, MBC1/2/3/5, DMG + CGB)    |
+| `crates/gba-core`      | GBA core (ARM7TDMI, scanline PPU modes 0-5, DMA, timers, APU)     |
 | `crates/gblab`         | egui app, cdylib for Android (NativeActivity via `android_main`)  |
 | `crates/gblab-desktop` | Desktop launcher binary                                           |
 
@@ -58,14 +59,20 @@ Battery saves are written as `<rom>.sav` next to the ROM.
 
 ```sh
 cargo test -p gb-core            # Blargg: cpu_instrs, instr_timing, mem_timing, halt_bug
+cargo test -p gba-core           # unit tests + jsmolka arm/thumb/memory ROM suites
 ```
 
 Current status: all four Blargg suites pass; dmg-acid2 renders pixel-perfect
 against the reference; cgb-acid2 matches structurally (1:1 color map).
+gba-core passes jsmolka's arm, thumb, memory, and nes suites (they park in an
+idle loop with the failed test number in r12/r7; 0 means pass) and the ppu
+demos are pinned by framebuffer hash. The app plays .gb/.gbc/.gba by
+extension; GBA L/R map to Q/W on desktop and shoulder pills on the touch pad.
 Render any ROM headless with:
 
 ```sh
 cargo run -p gb-core --example screenshot -- rom.gb out.ppm [frames]
+cargo run -p gba-core --example screenshot -- rom.gba out.ppm [frames]
 ```
 
 ## Controller (ESP32-H2 BLE pad)

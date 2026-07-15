@@ -4,20 +4,20 @@ use std::path::PathBuf;
 use std::time::{Duration, Instant};
 
 use egui::{CentralPanel, Color32, ColorImage, Panel, TextureHandle, TextureOptions};
-use gb_core::{GameBoy, SCREEN_H, SCREEN_W};
 
 use crate::audio::AudioOut;
+use crate::core::Core;
 use crate::input::{self, ControllerLink, TouchTracker};
 #[cfg(not(target_os = "android"))]
 use crate::input::NullController;
 
-/// Native Game Boy frame duration (59.7275 Hz).
+/// Native frame duration, shared by GB and GBA (59.7275 Hz).
 const FRAME_TIME: Duration = Duration::from_nanos(16_742_706);
 /// Audio backlog (stereo samples) above which we skip emulating extra frames.
 const AUDIO_BACKLOG_SKIP: usize = 9_600;
 
 pub struct GbLabApp {
-    gb: Option<GameBoy>,
+    core: Option<Core>,
     rom: Vec<u8>,
     rom_path: Option<PathBuf>,
     error: Option<String>,
@@ -51,7 +51,7 @@ impl GbLabApp {
         #[cfg(not(target_os = "android"))]
         let controller: Box<dyn ControllerLink> = Box::new(NullController);
         let mut app = GbLabApp {
-            gb: None,
+            core: None,
             rom: Vec::new(),
             rom_path: None,
             error: None,
@@ -66,7 +66,7 @@ impl GbLabApp {
             accumulator: Duration::ZERO,
             frames_run: 0,
             save_countdown: 0,
-            pad_states: [false; 8],
+            pad_states: [false; 10],
         };
         if let Some(path) = std::env::args().nth(1) {
             app.load_rom_from(PathBuf::from(path));
@@ -86,21 +86,23 @@ impl GbLabApp {
     }
 
     fn start(&mut self) {
-        match GameBoy::new(self.rom.clone()) {
-            Ok(mut gb) => {
+        // A ROM with no path (extension unknown) defaults to GB.
+        let path = self.rom_path.clone().unwrap_or_default();
+        match Core::new(self.rom.clone(), &path) {
+            Ok(mut core) => {
                 if let Some(sav) = self.sav_path()
                     && let Ok(data) = std::fs::read(&sav)
                 {
-                    gb.load_save_ram(&data);
+                    core.load_save_ram(&data);
                 }
-                self.gb = Some(gb);
+                self.core = Some(core);
                 self.error = None;
                 self.paused = false;
                 self.last_instant = None;
                 self.accumulator = Duration::ZERO;
             }
             Err(e) => {
-                self.gb = None;
+                self.core = None;
                 self.error = Some(e);
             }
         }
@@ -111,8 +113,8 @@ impl GbLabApp {
     }
 
     fn write_save(&self) {
-        if let (Some(gb), Some(path)) = (&self.gb, self.sav_path())
-            && let Some(ram) = gb.save_ram()
+        if let (Some(core), Some(path)) = (&self.core, self.sav_path())
+            && let Some(ram) = core.save_ram()
             && let Err(e) = std::fs::write(&path, ram)
         {
             log::warn!("failed to write save {}: {e}", path.display());
@@ -122,7 +124,7 @@ impl GbLabApp {
     fn run_emulation(&mut self, ctx: &egui::Context) {
         let pad = self.pad_states;
         let ext = self.controller.poll();
-        let Some(gb) = &mut self.gb else { return };
+        let Some(core) = &mut self.core else { return };
         if self.paused {
             self.last_instant = None;
             return;
@@ -140,18 +142,16 @@ impl GbLabApp {
             states = input::merge(states, ext);
         }
         states = input::merge(states, pad);
-        for (i, &b) in input::ALL_BUTTONS.iter().enumerate() {
-            gb.set_button(b, states[i]);
-        }
+        core.set_buttons(&states);
 
-        let backlog = gb.audio_queue_len();
+        let backlog = core.audio_queue_len();
         let mut frames = 0;
         while self.accumulator >= FRAME_TIME && frames < 4 {
             self.accumulator -= FRAME_TIME;
             if frames > 0 && backlog > AUDIO_BACKLOG_SKIP {
                 continue;
             }
-            gb.run_frame();
+            core.run_frame();
             frames += 1;
             self.frames_run += 1;
         }
@@ -160,13 +160,14 @@ impl GbLabApp {
         }
 
         let mut samples = Vec::new();
-        gb.drain_audio(&mut samples);
+        core.drain_audio(&mut samples);
         if let Some(audio) = &mut self.audio {
-            audio.push(&samples, gb_core::SAMPLE_RATE);
+            audio.push(&samples, core.sample_rate());
         }
 
         if frames > 0 {
-            let img = ColorImage::from_rgba_unmultiplied([SCREEN_W, SCREEN_H], gb.framebuffer());
+            let (w, h) = core.screen_size();
+            let img = ColorImage::from_rgba_unmultiplied([w, h], core.framebuffer());
             match &mut self.texture {
                 Some(t) => t.set(img, TextureOptions::NEAREST),
                 None => {
@@ -187,7 +188,7 @@ impl GbLabApp {
             #[cfg(not(target_os = "android"))]
             if ui.button("Open ROM").clicked()
                 && let Some(path) = rfd::FileDialog::new()
-                    .add_filter("Game Boy ROM", &["gb", "gbc"])
+                    .add_filter("ROM", &["gb", "gbc", "gba"])
                     .pick_file()
             {
                 self.load_rom_from(path);
@@ -197,7 +198,7 @@ impl GbLabApp {
                 self.show_browser = !self.show_browser;
             }
 
-            let has_rom = self.gb.is_some();
+            let has_rom = self.core.is_some();
             if ui.add_enabled(has_rom, egui::Button::new(if self.paused { "Resume" } else { "Pause" })).clicked() {
                 self.paused = !self.paused;
                 if self.paused {
@@ -211,9 +212,9 @@ impl GbLabApp {
             #[cfg(not(target_os = "android"))]
             ui.checkbox(&mut self.show_touch_pad, "Pad");
 
-            if let Some(gb) = &self.gb {
+            if let Some(core) = &self.core {
                 ui.separator();
-                ui.label(format!("{} [{:?}]", gb.title(), gb.model));
+                ui.label(format!("{} [{}]", core.title(), core.model_label()));
             }
             ui.with_layout(egui::Layout::right_to_left(egui::Align::Center), |ui| {
                 if self.controller.enabled() {
@@ -245,13 +246,13 @@ impl GbLabApp {
                         .filter(|p| {
                             matches!(
                                 p.extension().and_then(|e| e.to_str()),
-                                Some("gb") | Some("gbc")
+                                Some("gb") | Some("gbc") | Some("gba")
                             )
                         })
                         .collect();
                     roms.sort();
                     if roms.is_empty() {
-                        ui.weak("  (no .gb/.gbc files)");
+                        ui.weak("  (no .gb/.gbc/.gba files)");
                     }
                     for rom in roms {
                         let name = rom.file_name().unwrap_or_default().to_string_lossy().to_string();
@@ -305,27 +306,29 @@ impl eframe::App for GbLabApp {
         });
 
         if self.show_touch_pad {
+            let shoulders = matches!(&self.core, Some(Core::Gba(_)));
             Panel::bottom("gblab-pad").show(ui, |ui| {
-                self.pad_states = input::virtual_gamepad(ui, &self.touch);
+                self.pad_states = input::virtual_gamepad(ui, &self.touch, shoulders);
                 ui.add_space(inset_bottom);
             });
         } else {
-            self.pad_states = [false; 8];
+            self.pad_states = [false; 10];
         }
 
         CentralPanel::default().show(ui, |ui| {
-            if self.show_browser || self.gb.is_none() {
+            if self.show_browser || self.core.is_none() {
                 if let Some(err) = &self.error {
                     ui.colored_label(Color32::from_rgb(230, 90, 90), err);
                 }
                 self.rom_browser(ui);
                 return;
             }
-            if let Some(tex) = &self.texture {
+            if let (Some(core), Some(tex)) = (&self.core, &self.texture) {
+                let (w, h) = core.screen_size();
                 let avail = ui.available_size();
-                let scale = (avail.x / SCREEN_W as f32).min(avail.y / SCREEN_H as f32).max(1.0);
+                let scale = (avail.x / w as f32).min(avail.y / h as f32).max(1.0);
                 let scale = if scale > 1.5 { scale.floor() } else { scale };
-                let size = egui::vec2(SCREEN_W as f32 * scale, SCREEN_H as f32 * scale);
+                let size = egui::vec2(w as f32 * scale, h as f32 * scale);
                 ui.centered_and_justified(|ui| {
                     ui.add(egui::Image::new(tex).fit_to_exact_size(size));
                 });

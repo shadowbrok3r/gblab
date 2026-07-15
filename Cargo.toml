@@ -1,6 +1,6 @@
 [workspace]
 resolver = "3"
-members = ["crates/gb-core", "crates/gblab", "crates/gblab-desktop"]
+members = ["crates/gb-core", "crates/gba-core", "crates/gblab", "crates/gblab-desktop"]
 
 [workspace.package]
 edition = "2024"
@@ -13,4 +13,7 @@ opt-level = 3
 
 # Emulator cores are unusable unoptimized; keep dev builds fast enough to play.
 [profile.dev.package.gb-core]
+opt-level = 2
+
+[profile.dev.package.gba-core]
 opt-level = 2

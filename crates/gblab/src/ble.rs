@@ -103,8 +103,8 @@ impl ControllerLink for BleLink {
         let state = static_int("state").unwrap_or(STATE_FAILED);
         if state == STATE_CONNECTED {
             let bits = static_int("buttons").unwrap_or(0) as u8;
-            let mut out = [false; 8];
-            for (i, o) in out.iter_mut().enumerate() {
+            let mut out = [false; 10];
+            for (i, o) in out.iter_mut().take(8).enumerate() {
                 *o = bits & (1 << i) != 0;
             }
             return Some(out);
